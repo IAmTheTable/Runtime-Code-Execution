@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using System.Reflection;
 
-namespace TestZ
+namespace RuntimeCodeExec
 {
     /// <summary>
     /// A module that bases around dynamically loading C# code in a runtime environment.
@@ -60,5 +60,17 @@ namespace TestZ
             Console.WriteLine("EXECTUING IN LAYER 1");
             return customAssembly.DefinedTypes.First(x => x.Name == "Program").DeclaredMethods.First(x => x.Name == "Main").Invoke(null, new[] { parameters });
         }
+
+
+        /// <summary>
+        /// Flush the memory stream if needed, automatically flushes on code load.
+        /// </summary>
+        public void FlushStream() => _assemblyStream.Flush();
+
+        /// <summary>
+        /// Get the assembly in bytes.
+        /// </summary>
+        /// <returns></returns>
+        public byte[] GetAssembly() => _assemblyStream.ToArray();
     }
 }
